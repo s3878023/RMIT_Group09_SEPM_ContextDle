@@ -5,23 +5,29 @@
 }
 button{
     background-color: transparent;
-    color: #fff;
+    color: #F5F5F5;
     margin: 10px;
-    padding: 10px;
+    padding: 1em 2em;
     border-radius: 10px;
-    border: solid 2px #fff;
+    border: solid 5px #F5F5F5;
     text-transform: uppercase;
+    font-weight: 600;
+
+    transition: transform 0.3s, background-color 0.3s, color 0.3s;
 }
 button:hover{
-   background-color: #fff;
-   color: rgba(125,179,198,1);
-   border: solid 2px rgba(125,179,198,1) ;
+   transform: translateY(-5px);
+   color: transparent;
+   background-color: #F5F5F5;
+   color: #1F1F1f;
+   border: solid 5px #F5F5F5;
 }
 header{
     width: 100%;
     height: 100vh;
-    background: url(159Z_2107.w026.n002.628B.p1.628.jpg);
+    background:linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url(159Z_2107.w026.n002.628B.p1.628.jpg);
     background-size: cover;
+
 }
 nav{
     width: 100%;
@@ -30,6 +36,7 @@ nav{
     display: flex;
     justify-content: space-around;
     align-items: center;
+    filter: brightness(100%);
 }
 .logo{
     font-size:2em;
@@ -41,20 +48,23 @@ nav{
     padding: 10px 20px;
     font-size: 20px;
 }
-.text{
+.container{
     position: absolute;
     top: 50%;
     left: 50%;
-    max-width: 650px;
+    max-width: 125rem;
     transform: translate(-50%,-50%);
     text-align: center;
     color: #fff;
 }
-.text span{
+.container .text{
+    margin-bottom: 2rem;
+}
+.container span{
     letter-spacing: 5px;
     font-family: 'Raleway', sans-serif;
 }
-.text h1{
+.container h1{
     font-size: 3.5em;
     font-family: 'Raleway', sans-serif;
 }
