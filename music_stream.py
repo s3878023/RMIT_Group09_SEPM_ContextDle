@@ -6,7 +6,6 @@ import asyncio
 
 #  discord client
 client = discord.Client(intents=discord.Intents.all())
-
 # list of songs in the queue
 play_list = []
 
@@ -86,5 +85,21 @@ async def on_message(message):
         voice_client.stop()
         play_list.clear()
         await voice_client.disconnect()
+
+# embed help message
+@client.event
+async def on_message(message):
+    if message.content == '!help':
+        embed = discord.Embed(title="Help", description="List of commands:", color=0x00ff00)
+        embed.add_field(name="!play [song name]", value="play a song", inline=False)
+        embed.add_field(name="!queue", value="display the queue", inline=False)
+        embed.add_field(name="!skip", value="skip the current song", inline=False)
+        embed.add_field(name="!pause", value="pause the current song", inline=False)
+        embed.add_field(name="!resume", value="resume the current song", inline=False)
+        embed.add_field(name="!stop", value="stop the music and disconnect from the voice channel", inline=False)
+        embed.add_field(name="!help", value="display this message", inline=False)
+        await message.channel.send(embed=embed)
+
+
 # run the bot
 client.run(require.token)
