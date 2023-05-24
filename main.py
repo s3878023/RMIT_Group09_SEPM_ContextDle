@@ -1,8 +1,4 @@
-#play the downloaded song on discord voice channel
-import subprocess
-import nest_asyncio
-nest_asyncio.apply()
-import os.path
+# play the downloaded song on discord voice channel
 import asyncio
 import search_download
 import discord
@@ -10,12 +6,17 @@ import require
 
 # Discord authentication
 client = discord.Client(intents=discord.Intents.all())
-#call when the bos is ready
+
+play_list = []
+# call when the bos is ready
 @client.event
 async def on_ready():
     print('Logged in as {0.user}'.format(client))
 
-#call when a message is sent
+
+
+
+# call when a message is sent
 @client.event
 async def on_message(message):
     if message.author == client.user:
@@ -26,23 +27,26 @@ async def on_message(message):
             await message.channel.send('You must be in a voice channel to use this command.')
             return
         channel = message.author.voice.channel
-        #if the bot is not in the voice channel, connect to it
+        # if the bot is not in the voice channel, connect to it
         if not message.guild.voice_client:
-             await channel.connect()
+            await channel.connect()
         vc = message.guild.voice_client
-    # search and download the song
+        # search for the song on spotify
         song_name = message.content[6:]
-        search_download.check_song(song_name)
-        while not os.path.exists(f"{search_download.song_search(song_name)[0]}.mp3"):
-            await asyncio.sleep(1)
-        loop.run_until_complete(search_download.check_song(song_name))
-
-        #play the first song in the queue
-        if len(search_download.song_search(song_name)) == 0:
-            await message.channel.send('Song not found.')
-            return
-        await message.channel.send(f"Playing {search_download.song_search(song_name)[0]}")
-        vc.play(discord.FFmpegPCMAudio(f"{search_download.play_list[0]}"))
+        track = search_download.song_search(song_name)
+        # check if the song is already downloaded
+        search_download.check_song(track[0])
+        # check if a song is playing, add the song to the queue. if not, play the song
+        if vc.is_playing():
+            play_list.append(f"{track[0]}")
+            await message.channel.send(f"Added {track[0]} to the queue.")
+        else:
+            play_list.append(f"{song_name}")
+            await message.channel.send(f"Playing {track[0]}")
+            vc.play(discord.FFmpegPCMAudio(f"{track[0]}.mp3"))
+            while vc.is_playing():
+                await asyncio.sleep(1)
+            play_list.pop(0)
     # check if the message is a queue command
     if message.content.startswith('!queue'):
         # check if the queue is empty
@@ -76,22 +80,17 @@ async def on_message(message):
         if voice_client.is_paused():
             voice_client.resume()
             await message.channel.send('Resumed.')
-    #clear the queue
+    # clear the queue
     if message.content == '!clear':
         play_list.clear()
         await message.channel.send('The queue is cleared.')
-    #leave the voice channel
+    # leave the voice channel
     if message.content == '!leave':
         voice_client = message.guild.voice_client
         if voice_client.is_connected():
             await voice_client.disconnect()
             await message.channel.send('Disconnected.')
 
+
 # run the bot
 client.run(require.token)
-
-
-
-
-
-
