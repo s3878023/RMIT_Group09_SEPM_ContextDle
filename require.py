@@ -1,0 +1,4 @@
+
+token = 'MTEwMDAwMzgyMTQ5ODk0MTUyMQ.GVADav.KEk6jUQV7MfRkFvg9r2PwVrAw3p5dX5fb4eS-E'
+clientID = '55d9d6208ee448f386daf66891f00837'
+secretID = 'c015cebd6f704b918b0c236028c252cb'
